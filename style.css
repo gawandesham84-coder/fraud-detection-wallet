@@ -1,0 +1,248 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 2.5em;
+}
+
+.header p {
+    color: #7f8c8d;
+    font-size: 1.1em;
+}
+
+.upload-section {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #2c3e50;
+    font-size: 1.1em;
+}
+
+.form-group input[type="file"] {
+    padding: 15px;
+    border: 2px dashed #3498db;
+    border-radius: 8px;
+    background: white;
+    text-align: center;
+    cursor: pointer;
+}
+
+.form-group small {
+    color: #7f8c8d;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+.upload-btn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+.info-box {
+    background: #e8f4fd;
+    padding: 25px;
+    border-radius: 10px;
+    border-left: 4px solid #3498db;
+    margin-bottom: 30px;
+}
+
+.info-box h3 {
+    color: #2980b9;
+    margin-bottom: 15px;
+}
+
+.info-box ul {
+    margin-top: 15px;
+    padding-left: 25px;
+}
+
+.info-box li {
+    margin-bottom: 8px;
+    color: #7f8c8d;
+}
+
+.action-buttons {
+    text-align: center;
+}
+
+.back-btn {
+    display: inline-block;
+    background: #95a5a6;
+    color: white;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #7f8c8d;
+    transform: translateY(-2px);
+}
+
+/* Results table styles */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.results-table th,
+.results-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.results-table th {
+    background: #34495e;
+    color: white;
+    font-weight: 600;
+}
+
+.results-table tr:hover {
+    background: #f8f9fa;
+}
+
+.fraud-row {
+    background: #ffeaea !important;
+}
+
+.fraud-row:hover {
+    background: #ffd5d5 !important;
+}
+
+.high-risk {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+.medium-risk {
+    color: #f39c12;
+    font-weight: 600;
+}
+
+.low-risk {
+    color: #27ae60;
+    font-weight: 600;
+}
+
+.summary-card {
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.summary-card h3 {
+    margin-bottom: 15px;
+    color: #ecf0f1;
+}
+
+.summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.stat-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #3498db;
+}
+
+.stat-label {
+    font-size: 0.9em;
+    color: #bdc3c7;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 20px;
+    }
+    
+    .upload-section {
+        padding: 20px;
+    }
+    
+    .results-table {
+        font-size: 14px;
+    }
+    
+    .results-table th,
+    .results-table td {
+        padding: 8px;
+    }
+    
+    .summary-stats {
+        grid-template-columns: 1fr;
+    }
+}

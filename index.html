@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Fraud Detection System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --danger: #e74c3c;
+            --safe: #2ecc71;
+            --warning: #f39c12;
+            --background: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --border: #ddd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .result-container {
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .safe {
+            background-color: rgba(46, 204, 113, 0.15);
+            border: 2px solid var(--safe);
+        }
+        
+        .warning {
+            background-color: rgba(243, 156, 18, 0.15);
+            border: 2px solid var(--warning);
+        }
+        
+        .danger {
+            background-color: rgba(231, 76, 60, 0.15);
+            border: 2px solid var(--danger);
+        }
+        
+        .risk-level {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .risk-score {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .recommendation {
+            font-size: 16px;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .icon {
+            margin-right: 8px;
+        }
+        
+        .risk-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .risk-low {
+            background-color: var(--safe);
+            color: white;
+        }
+        
+        .risk-medium {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .risk-high {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .recent-assessment {
+            margin-top: 30px;
+        }
+        
+        .assessment-item {
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+        }
+        
+        .assessment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .assessment-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 14px;
+        }
+        
+        .assessment-risk {
+            text-align: center;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        
+        .history-container {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        @media (max-width: 600px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-wallet icon"></i>Wallet Fraud Detection System</h1>
+            <p class="subtitle">Machine Learning Powered Transaction Monitoring</p>
+        </header>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-chart-line icon"></i>Transaction Risk Prediction</h2>
+                
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="transactionId"><i class="fas fa-hashtag icon"></i>Transaction ID</label>
+                        <input type="text" id="transactionId" placeholder="Enter Transaction ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="timestamp"><i class="fas fa-calendar-alt icon"></i>Timestamp (UTC)</label>
+                        <input type="datetime-local" id="timestamp">
+                    </div>
+                </div>
+                
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="senderId"><i class="fas fa-user icon"></i>Sender ID</label>
+                        <input type="text" id="senderId" placeholder="Enter Sender ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="receiverId"><i class="fas fa-user icon"></i>Receiver ID</label>
+                        <input type="text" id="receiverId" placeholder="Enter Receiver ID">
+                    </div>
+                </div>
+                
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="amount"><i class="fas fa-money-bill-wave icon"></i>Amount</label>
+                        <input type="number" id="amount" placeholder="Enter Amount" min="0" step="0.01">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="currency"><i class="fas fa-coins icon"></i>Currency</label>
+                        <select id="currency">
+                            <option value="INR" selected>INR</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                            <option value="JPY">JPY</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="transactionType"><i class="fas fa-exchange-alt icon"></i>Transaction Type</label>
+                        <select id="transactionType">
+                            <option value="">Select Transaction Type</option>
+                            <option value="payment">Payment</option>
+                            <option value="refund">Refund</option>
+                            <option value="transfer">Transfer</option>
+                            <option value="cashout">Cashout</option>
+                            <option value="deposit">Deposit</option>
+                            <option value="swap">Swap</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="status"><i class="fas fa-check-circle icon"></i>Status</label>
+                        <select id="status">
+                            <option value="success">Success</option>
+                            <option value="failed">Failed</option>
+                            <option value="pending">Pending</option>
+                            <option value="reversed">Reversed</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button id="predictBtn" class="btn"><i class="fas fa-search icon"></i>Predict Fraud Risk</button>
+                
+                <div id="resultContainer" class="result-container" style="display: none;">
+                    <div id="riskLevel" class="risk-level"></div>
+                    <div id="riskScore" class="risk-score"></div>
+                    <div id="recommendation" class="recommendation"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-history icon"></i>Risk Assessment History</h2>
+                
+                <div class="history-container">
+                    <div class="recent-assessment">
+                        <h3>Recent Risk Assessments</h3>
+                        
+                        <div class="assessment-item">
+                            <div class="assessment-header">
+                                <span>TX: TXN789012</span>
+                                <span>Today, 14:30</span>
+                            </div>
+                            <div class="assessment-details">
+                                <div><strong>Sender:</strong> USER456789</div>
+                                <div><strong>Receiver:</strong> USER987654</div>
+                                <div><strong>Amount:</strong> ₹223,345.00</div>
+                                <div><strong>Type:</strong> Withdrawal</div>
+                                <div><strong>Status:</strong> Success</div>
+                                <div><strong>Time:</strong> 2025-09-20 14:30 UTC</div>
+                            </div>
+                            <div class="assessment-risk risk-high">HIGH RISK (0.8433)</div>
+                        </div>
+                        
+                        <div class="assessment-item">
+                            <div class="assessment-header">
+                                <span>TX: TXN567890</span>
+                                <span>Today, 11:20</span>
+                            </div>
+                            <div class="assessment-details">
+                                <div><strong>Sender:</strong> USER123456</div>
+                                <div><strong>Receiver:</strong> USER456789</div>
+                                <div><strong>Amount:</strong> ₹81,250.00</div>
+                                <div><strong>Type:</strong> Withdrawal</div>
+                                <div><strong>Status:</strong> Success</div>
+                                <div><strong>Time:</strong> 2025-09-20 11:20 UTC</div>
+                            </div>
+                            <div class="assessment-risk risk-medium">MEDIUM RISK (0.5241)</div>
+                        </div>
+                        
+                        <div class="assessment-item">
+                            <div class="assessment-header">
+                                <span>TX: TXN345678</span>
+                                <span>Today, 10:15</span>
+                            </div>
+                            <div class="assessment-details">
+                                <div><strong>Sender:</strong> USER123456</div>
+                                <div><strong>Receiver:</strong> USER789012</div>
+                                <div><strong>Amount:</strong> ₹53,500.00</div>
+                                <div><strong>Type:</strong> Transfer</div>
+                                <div><strong>Status:</strong> Success</div>
+                                <div><strong>Time:</strong> 2025-09-20 10:15 UTC</div>
+                            </div>
+                            <div class="assessment-risk risk-high">HIGH RISK (0.7125)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set current datetime as default
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('timestamp').value = now.toISOString().slice(0, 16);
+        });
+
+        document.getElementById('predictBtn').addEventListener('click', function() {
+            // Get input values
+            const transactionId = document.getElementById('transactionId').value;
+            const timestamp = document.getElementById('timestamp').value;
+            const senderId = document.getElementById('senderId').value;
+            const receiverId = document.getElementById('receiverId').value;
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const currency = document.getElementById('currency').value;
+            const transactionType = document.getElementById('transactionType').value;
+            const status = document.getElementById('status').value;
+            
+            // Validate inputs
+            if (!transactionId) {
+                alert('Please enter a Transaction ID');
+                return;
+            }
+            
+            if (!senderId) {
+                alert('Please enter a Sender ID');
+                return;
+            }
+            
+            if (!receiverId) {
+                alert('Please enter a Receiver ID');
+                return;
+            }
+            
+            if (!transactionType) {
+                alert('Please select a Transaction Type');
+                return;
+            }
+            
+            if (amount <= 0) {
+                alert('Please enter a valid Amount');
+                return;
+            }
+            
+            // Simulate risk calculation (in a real system, this would call your ML model)
+            let riskScore = 0;
+            
+            // Higher amount increases risk
+            riskScore += Math.min(amount / 2000, 0.4);
+            
+            // Certain transaction types are riskier
+            if (transactionType === 'cashout') riskScore += 0.3;
+            if (transactionType === 'withdrawal') riskScore += 0.2;
+            if (transactionType === 'transfer') riskScore += 0.15;
+            
+            // Failed or reversed transactions might indicate issues
+            if (status === 'failed') riskScore += 0.1;
+            if (status === 'reversed') riskScore += 0.2;
+            
+            riskScore = Math.min(riskScore, 1); // Cap at 1
+            
+            // Display results
+            const resultContainer = document.getElementById('resultContainer');
+            const riskLevel = document.getElementById('riskLevel');
+            const riskScoreElement = document.getElementById('riskScore');
+            const recommendation = document.getElementById('recommendation');
+            
+            riskScoreElement.textContent = `Risk Score: ${riskScore.toFixed(4)}`;
+            
+            if (riskScore < 0.3) {
+                riskLevel.textContent = 'LOW RISK';
+                riskLevel.style.color = 'var(--safe)';
+                resultContainer.className = 'result-container safe';
+                recommendation.textContent = 'This transaction appears safe. No action needed.';
+            } else if (riskScore < 0.7) {
+                riskLevel.textContent = 'MEDIUM RISK';
+                riskLevel.style.color = 'var(--warning)';
+                resultContainer.className = 'result-container warning';
+                recommendation.textContent = 'Review this transaction carefully. Consider additional verification.';
+            } else {
+                riskLevel.textContent = 'HIGH RISK';
+                riskLevel.style.color = 'var(--danger)';
+                resultContainer.className = 'result-container danger';
+                recommendation.textContent = 'This transaction is likely fraudulent. Recommend blocking and alerting security team.';
+            }
+            
+            resultContainer.style.display = 'block';
+            
+            // Add to recent assessments
+            const assessmentContainer = document.querySelector('.recent-assessment');
+            const newAssessment = document.createElement('div');
+            newAssessment.className = 'assessment-item';
+            
+            let riskClass = 'risk-high';
+            if (riskScore < 0.3) riskClass = 'risk-low';
+            else if (riskScore < 0.7) riskClass = 'risk-medium';
+            
+            // Format amount with Indian numbering system
+            const formattedAmount = new Intl.NumberFormat('en-IN', {
+                maximumFractionDigits: 2
+            }).format(amount);
+            
+            // Format currency symbol
+            let currencySymbol = '₹';
+            if (currency === 'USD') currencySymbol = '$';
+            else if (currency === 'EUR') currencySymbol = '€';
+            else if (currency === 'GBP') currencySymbol = '£';
+            else if (currency === 'JPY') currencySymbol = '¥';
+            
+            // Format timestamp
+            const date = new Date(timestamp);
+            const formattedDate = date.toLocaleDateString();
+            const formattedTime = date.toLocaleTimeString();
+            
+            newAssessment.innerHTML = `
+                <div class="assessment-header">
+                    <span>TX: ${transactionId}</span>
+                    <span>Just now</span>
+                </div>
+                <div class="assessment-details">
+                    <div><strong>Sender:</strong> ${senderId}</div>
+                    <div><strong>Receiver:</strong> ${receiverId}</div>
+                    <div><strong>Amount:</strong> ${currencySymbol}${formattedAmount}</div>
+                    <div><strong>Type:</strong> ${transactionType.charAt(0).toUpperCase() + transactionType.slice(1)}</div>
+                    <div><strong>Status:</strong> ${status.charAt(0).toUpperCase() + status.slice(1)}</div>
+                    <div><strong>Time:</strong> ${formattedDate} ${formattedTime}</div>
+                </div>
+                <div class="assessment-risk ${riskClass}">${riskLevel.textContent} (${riskScore.toFixed(4)})</div>
+            `;
+            
+            // Add new assessment at the top of the list
+            assessmentContainer.insertBefore(newAssessment, assessmentContainer.firstChild);
+        });
+    </script>
+</body>
+</html>

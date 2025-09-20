@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Analysis Result</h1>
+            <p>Transaction fraud detection results</p>
+        </div>
+
+        <div class="result-card {% if result.prediction == 'FRAUD' %}fraud{% else %}legitimate{% endif %}">
+            <div class="result-header">
+                <h2>Transaction Status: {{ result.prediction }}</h2>
+                <span class="risk-badge {{ result.risk_level|lower|replace(' ', '-') }}">
+                    {{ result.risk_level }}
+                </span>
+            </div>
+
+            <div class="result-metrics">
+                <div class="metric">
+                    <span class="metric-label">Fraud Probability:</span>
+                    <span class="metric-value">{{ result.fraud_probability }}</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Confidence:</span>
+                    <span class="metric-value">{{ result.confidence }}</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Analysis Time:</span>
+                    <span class="metric-value">{{ result.timestamp }}</span>
+                </div>
+            </div>
+
+            {% if result.prediction == 'FRAUD' %}
+            <div class="fraud-alert">
+                <h3>🚨 Fraud Alert</h3>
+                <p>This transaction has been flagged as potentially fraudulent. Recommended actions:</p>
+                <ul>
+                    <li>Verify transaction details with customer</li>
+                    <li>Review recent transaction history</li>
+                    <li>Consider temporary account freeze</li>
+                </ul>
+            </div>
+            {% else %}
+            <div class="legitimate-message">
+                <h3>✅ Transaction Approved</h3>
+                <p>This transaction appears to be legitimate based on our fraud detection model.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="action-buttons">
+            <a href="{{ url_for('home') }}" class="back-btn">← Analyze Another Transaction</a>
+            <a href="{{ url_for('batch_analyze') }}" class="batch-btn">📊 Batch Analysis</a>
+            <button onclick="window.print()" class="print-btn">🖨️ Print Report</button>
+        </div>
+    </div>
+</body>
+</html>
