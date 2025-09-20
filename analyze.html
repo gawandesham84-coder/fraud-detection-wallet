@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Analysis - Fraud Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Batch Transaction Analysis</h1>
+            <p>Upload a CSV file for bulk fraud detection</p>
+        </div>
+
+        <div class="upload-section">
+            <form action="/batch_analyze" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="file">Select CSV File:</label>
+                    <input type="file" id="file" name="file" accept=".csv" required>
+                    <small>CSV must contain columns: V1-V28, Time, Amount</small>
+                </div>
+                
+                <button type="submit" class="upload-btn">Analyze File</button>
+            </form>
+        </div>
+
+        <div class="info-box">
+            <h3>📋 CSV Format Requirements</h3>
+            <p>Your CSV file should have these columns (in any order):</p>
+            <ul>
+                <li><strong>V1-V28:</strong> Anonymized PCA features</li>
+                <li><strong>Time:</strong> Seconds since first transaction</li>
+                <li><strong>Amount:</strong> Transaction amount</li>
+                <li><strong>Class:</strong> (Optional) Actual fraud label for validation</li>
+            </ul>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{{ url_for('home') }}" class="back-btn">← Single Transaction</a>
+        </div>
+    </div>
+</body>
+</html>
